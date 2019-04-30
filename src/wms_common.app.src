@@ -1,13 +1,13 @@
 {application, wms_common,
  [{description, "Common functions for WMS"},
-  {vsn, "0.1.0"},
+  {vsn, git},
   {registered, []},
   {applications,
    [kernel,
     stdlib
    ]},
   {env,[]},
-  {modules, []},
+  {modules, [wms_common]},
 
   {licenses, ["Apache 2.0"]},
   {links, []}
