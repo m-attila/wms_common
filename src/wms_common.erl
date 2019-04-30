@@ -7,7 +7,8 @@
          elapsed/3,
          elapsed/2,
          compare/2,
-         convert/2]).
+         convert/2,
+         add/2]).
 
 %%====================================================================
 %% API functions
@@ -102,6 +103,24 @@ elapsed({EUnit, Earlier}, {LUnit, Later}, TimeUnit) ->
 elapsed(Earlier, TimeUnit) ->
   elapsed(Earlier, timestamp(), TimeUnit).
 
+%% @doc
+%%
+%%-------------------------------------------------------------------
+%%
+%% ### Function
+%% compare/2
+%% ###### Purpose
+%% Compare timestamps T1, T2
+%% ###### Arguments
+%%
+%% ###### Returns
+%% -1 if T1 < T2
+%% 0 if T1 = T2
+%% 1 if T1 > T2
+%%-------------------------------------------------------------------
+%%
+%% @end
+
 -spec compare(timestamp(), timestamp()) ->
   -1 | 0 | 1.
 compare({Unit, Value1}, {Unit, Value2}) ->
@@ -109,6 +128,31 @@ compare({Unit, Value1}, {Unit, Value2}) ->
 compare({Unit1, Value1}, {Unit2, Value2}) ->
   sgn(erlang:convert_time_unit(Value1, Unit1, native) -
         erlang:convert_time_unit(Value2, Unit2, native)).
+
+
+%% @doc
+%%
+%%-------------------------------------------------------------------
+%%
+%% ### Function
+%% add/2
+%% ###### Purpose
+%% Add timestamp and offset
+%% ###### Arguments
+%%
+%% ###### Returns
+%%
+%%-------------------------------------------------------------------
+%%
+%% @end
+-spec add(timestamp(), timestamp()) ->
+  timestamp().
+add({Unit, Value}, {Unit, OffsetValue}) ->
+  {Unit, Value + OffsetValue};
+add({Unit1, _} = Timestamp, Offset) ->
+  ConvertedOffset = convert(Offset, Unit1),
+  add(Timestamp, ConvertedOffset).
+
 
 %%====================================================================
 %% Internal functions

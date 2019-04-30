@@ -55,6 +55,12 @@ convert_test() ->
   Expected = {second, 1},
   ?assertEqual(Expected, wms_common:convert(Timestamp, second)).
 
+add_test() ->
+  ?assertEqual({millisecond, 1000}, wms_common:add({millisecond, 100},
+                                                   {millisecond, 900})),
+  ?assertEqual({second, 2}, wms_common:add({second, 1},
+                                           {millisecond, 1000})).
+
 
 
 
