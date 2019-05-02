@@ -86,6 +86,35 @@ get_proplist_value_test() ->
                                                     [main, sub], default)),
   ok.
 
+proplist_to_map_test() ->
+  % proplist is empty
+  ?assertEqual(#{}, wms_common:proplist_to_map([])),
+
+  % proplist is not empty
+  List =
+    [
+      {mode, test},
+      {nodes, [
+        {database, [n1@node, n2@node]},
+        {tools, [t1@node, t2@node]},
+        {application, [
+          {app1, [na11@node, na12@node]},
+          {app2, [na21@node, na22@node]},
+          {timeout, 12}
+        ]}
+      ]},
+      {version, "1.0.0"}
+    ],
+  Expected = #{
+               [mode] => test,
+               [nodes, database] => [n1@node, n2@node],
+               [nodes, tools] => [t1@node, t2@node],
+               [nodes, application, app1] => [na11@node, na12@node],
+               [nodes, application, app2] => [na21@node, na22@node],
+               [nodes, application, timeout] => 12,
+               [version] => "1.0.0"
+             },
+  ?assertEqual(Expected, wms_common:proplist_to_map(List)).
 
 
 

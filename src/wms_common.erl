@@ -8,7 +8,7 @@
          elapsed/2,
          compare/2,
          convert/2,
-         add/2, get_proplist_value/3]).
+         add/2, get_proplist_value/3, proplist_to_map/1]).
 
 %%====================================================================
 %% API functions
@@ -186,6 +186,11 @@ get_proplist_value(Proplist, [Key | Rest], Default) ->
 get_proplist_value(Proplist, Key, Default) ->
   proplists:get_value(Key, Proplist, Default).
 
+-spec proplist_to_map([{term(), term() | [term()]}]) ->
+  map().
+proplist_to_map(Proplist) ->
+  to_map(Proplist, [], #{}).
+
 %%====================================================================
 %% Internal functions
 %%====================================================================
@@ -195,3 +200,21 @@ sgn(0) ->
   0;
 sgn(Number) ->
   Number div abs(Number).
+
+-spec to_map([{term(), term() | [term()]}], [term()], map()) ->
+  map().
+to_map([], _, Map) ->
+  Map;
+to_map([{Key, Value} | Rest], KeyPath, Map) when is_list(Value) ->
+  ValuePath = [Key | KeyPath],
+
+  NewMap = case Value of
+             [{_KeyV, _ValueV} | _RestV] ->
+               to_map(Value, ValuePath, Map);
+             _ ->
+               Map#{lists:reverse(ValuePath) => Value}
+           end,
+  to_map(Rest, KeyPath, NewMap);
+to_map([{Key, Value} | Rest], KeyPath, Map) ->
+  ValuePath = [Key | KeyPath],
+  to_map(Rest, KeyPath, Map#{lists:reverse(ValuePath) => Value}).
