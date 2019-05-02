@@ -114,7 +114,31 @@ proplist_to_map_test() ->
                [nodes, application, timeout] => 12,
                [version] => "1.0.0"
              },
-  ?assertEqual(Expected, wms_common:proplist_to_map(List)).
+  ?assertEqual(Expected, wms_common:proplist_to_map(List)),
+
+  % keys with prefix-1
+  Expected1 = #{
+                [myapp, mode] => test,
+                [myapp, nodes, database] => [n1@node, n2@node],
+                [myapp, nodes, tools] => [t1@node, t2@node],
+                [myapp, nodes, application, app1] => [na11@node, na12@node],
+                [myapp, nodes, application, app2] => [na21@node, na22@node],
+                [myapp, nodes, application, timeout] => 12,
+                [myapp, version] => "1.0.0"
+              },
+  ?assertEqual(Expected1, wms_common:proplist_to_map(List, myapp)),
+% keys with prefix-1
+  Expected2 = #{
+                [myapp, test, mode] => test,
+                [myapp, test, nodes, database] => [n1@node, n2@node],
+                [myapp, test, nodes, tools] => [t1@node, t2@node],
+                [myapp, test, nodes, application, app1] => [na11@node, na12@node],
+                [myapp, test, nodes, application, app2] => [na21@node, na22@node],
+                [myapp, test, nodes, application, timeout] => 12,
+                [myapp, test, version] => "1.0.0"
+              },
+  ?assertEqual(Expected2, wms_common:proplist_to_map(List, [myapp, test])).
+
 
 
 

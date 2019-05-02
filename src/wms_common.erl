@@ -8,7 +8,7 @@
          elapsed/2,
          compare/2,
          convert/2,
-         add/2, get_proplist_value/3, proplist_to_map/1]).
+         add/2, get_proplist_value/3, proplist_to_map/1, proplist_to_map/2]).
 
 %%====================================================================
 %% API functions
@@ -190,6 +190,17 @@ get_proplist_value(Proplist, Key, Default) ->
   map().
 proplist_to_map(Proplist) ->
   to_map(Proplist, [], #{}).
+
+-spec proplist_to_map([{term(), term() | [term()]}], term() | [term()]) ->
+  map().
+proplist_to_map(Proplist, PrefixKeys) when is_list(PrefixKeys) ->
+  Map = proplist_to_map(Proplist),
+  maps:fold(
+    fun(K, V, NewMap) ->
+      NewMap#{PrefixKeys ++ K => V}
+    end, #{}, Map);
+proplist_to_map(Proplist, PrefixKey) ->
+  proplist_to_map(Proplist, [PrefixKey]).
 
 %%====================================================================
 %% Internal functions
