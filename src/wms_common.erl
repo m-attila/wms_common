@@ -8,7 +8,7 @@
          elapsed/2,
          compare/2,
          convert/2,
-         add/2]).
+         add/2, get_proplist_value/3]).
 
 %%====================================================================
 %% API functions
@@ -153,6 +153,38 @@ add({Unit1, _} = Timestamp, Offset) ->
   ConvertedOffset = convert(Offset, Unit1),
   add(Timestamp, ConvertedOffset).
 
+%% @doc
+%%
+%%-------------------------------------------------------------------
+%%
+%% ### Function
+%% get_value/3
+%% ###### Purpose
+%% Return value from embedded property list.
+%% ###### Arguments
+%% * Proplist - property list
+%% * Keys - list of keys
+%% * Default - default value.
+%% ###### Returns
+%% Value in proplist or default value if does not found.
+%%-------------------------------------------------------------------
+%%
+%% @end
+-spec get_proplist_value([{term(), term() | [term()]}], [term()], term()) ->
+  term().
+get_proplist_value([], _, Default) ->
+  Default;
+get_proplist_value(Proplist, [Key], Default) ->
+  proplists:get_value(Key, Proplist, Default);
+get_proplist_value(Proplist, [Key | Rest], Default) ->
+  case proplists:get_value(Key, Proplist, undefined) of
+    V when is_list(V) ->
+      get_proplist_value(V, Rest, Default);
+    _ ->
+      Default
+  end;
+get_proplist_value(Proplist, Key, Default) ->
+  proplists:get_value(Key, Proplist, Default).
 
 %%====================================================================
 %% Internal functions

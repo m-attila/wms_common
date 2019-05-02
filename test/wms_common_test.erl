@@ -61,6 +61,31 @@ add_test() ->
   ?assertEqual({second, 2}, wms_common:add({second, 1},
                                            {millisecond, 1000})).
 
+get_proplist_value_test() ->
+  % empty proplist
+  ?assertEqual(default, wms_common:get_proplist_value([], key, default)),
+  ?assertEqual(default, wms_common:get_proplist_value([], [key], default)),
+  ?assertEqual(default, wms_common:get_proplist_value([], [key1, key2], default)),
+
+  % key not found
+  ?assertEqual(default, wms_common:get_proplist_value([{main, value}],
+                                                      key, default)),
+  ?assertEqual(default, wms_common:get_proplist_value([{main, value}],
+                                                      [key], default)),
+  ?assertEqual(default, wms_common:get_proplist_value([{main, value}],
+                                                      [key1, key2], default)),
+  ?assertEqual(default, wms_common:get_proplist_value([{main, [{sub, value}]}],
+                                                      [key1, key2], default)),
+
+  % key found
+  ?assertEqual(value, wms_common:get_proplist_value([{main, value}],
+                                                    main, default)),
+  ?assertEqual(value, wms_common:get_proplist_value([{main, value}],
+                                                    [main], default)),
+  ?assertEqual(value, wms_common:get_proplist_value([{main, [{sub, value}]}],
+                                                    [main, sub], default)),
+  ok.
+
 
 
 
