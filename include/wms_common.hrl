@@ -8,5 +8,10 @@
 %%%-------------------------------------------------------------------
 -author("Attila Makra").
 
+%% =============================================================================
+%% Types
+%% =============================================================================
+
 -type time_unit() :: 'second'| 'millisecond'| 'microsecond'| 'nanosecond' | 'native'.
 -type timestamp() :: {time_unit(), integer()}.
+-type fork_retval() :: {ok | error | throw, term()}.
