@@ -37,7 +37,9 @@ fork(Fun, ExtraArgs, Elements, Timeout) ->
 -spec create_args([term()], [term()], integer(), [{integer(), [term()]}]) ->
   [{integer(), [term()]}].
 create_args(_, [], _, Accu) ->
-  Accu;
+  % in parallel execution cannot be guarantee order of execution but
+  % it try to keep arguments order.
+  lists:reverse(Accu);
 create_args(ExtraArgs, [H | T], ID, Accu) ->
   Arg = {ID, [H | ExtraArgs]},
   create_args(ExtraArgs, T, ID + 1, [Arg | Accu]).
