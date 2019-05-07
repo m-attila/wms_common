@@ -12,7 +12,9 @@
          get_proplist_value/3,
          proplist_to_map/1,
          proplist_to_map/2,
-         fork/4]).
+         fork/4,
+         eval_operation/3,
+         eval_operation/2]).
 
 %%====================================================================
 %% API functions
@@ -189,3 +191,17 @@ proplist_to_map(Proplist, PrefixKeys) ->
   [fork_retval()].
 fork(Fun, ExtraArgs, Elements, Timeout) ->
   wms_common_fork:fork(Fun, ExtraArgs, Elements, Timeout).
+
+%% -----------------------------------------------------------------------------
+%% Evaluate operations functions
+%% -----------------------------------------------------------------------------
+-spec eval_operation(term(), term(), term()) ->
+  term() | {error, term()}.
+eval_operation(Literal1, Operation, Literal2) ->
+  wms_common_operator:eval_operation(Literal1, Operation, Literal2).
+
+-spec eval_operation(term(), term()) ->
+  term() | {error, term()}.
+eval_operation(Literal, Operation) ->
+  wms_common_operator:eval_operation(Literal, Operation).
+
