@@ -209,8 +209,10 @@ get_hostname(Node) ->
   lists:nth(2, re:split(Node,
                         "@", [{return, list}, {parts, 2}])).
 
--spec add_host(string()) ->
-  string().
-add_host(Name) ->
-  Name ++ "@" ++ get_hostname().
+-spec add_host(string() | atom()) ->
+  string | atom().
+add_host(Name) when is_list(Name) ->
+  Name ++ "@" ++ get_hostname();
+add_host(Name) when is_atom(Name) ->
+  list_to_atom(atom_to_list(Name) ++ "@" ++ get_hostname()).
 

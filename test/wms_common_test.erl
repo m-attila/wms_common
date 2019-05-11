@@ -142,4 +142,5 @@ proplist_to_map_test() ->
 host_test() ->
   ?assertEqual("nohost", wms_common:get_hostname()),
   ?assertEqual("makraat", wms_common:get_hostname("wms1@makraat")),
-  ?assertEqual("wms1@nohost", wms_common:add_host("wms1")).
+  ?assertEqual("wms1@nohost", wms_common:add_host("wms1")),
+  ?assertEqual(wms1@nohost, wms_common:add_host(wms1)).
