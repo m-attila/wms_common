@@ -12,7 +12,9 @@
          get_proplist_value/3,
          proplist_to_map/1,
          proplist_to_map/2,
-         fork/4]).
+         fork/4,
+         get_hostname/1,
+         get_hostname/0, add_host/1]).
 
 %%====================================================================
 %% API functions
@@ -189,3 +191,26 @@ proplist_to_map(Proplist, PrefixKeys) ->
   [fork_retval()].
 fork(Fun, ExtraArgs, Elements, Timeout) ->
   wms_common_fork:fork(Fun, ExtraArgs, Elements, Timeout).
+
+%% -----------------------------------------------------------------------------
+%% Host functions
+%% -----------------------------------------------------------------------------
+
+-spec get_hostname() ->
+  string().
+get_hostname() ->
+  get_hostname(node()).
+
+-spec get_hostname(node()) ->
+  string().
+get_hostname(Node) when is_atom(Node) ->
+  get_hostname(atom_to_list(Node));
+get_hostname(Node) ->
+  lists:nth(2, re:split(Node,
+                        "@", [{return, list}, {parts, 2}])).
+
+-spec add_host(string()) ->
+  string().
+add_host(Name) ->
+  Name ++ "@" ++ get_hostname().
+

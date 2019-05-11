@@ -138,3 +138,8 @@ proplist_to_map_test() ->
                 [myapp, test, version] => "1.0.0"
               },
   ?assertEqual(Expected2, wms_common:proplist_to_map(List, [myapp, test])).
+
+host_test() ->
+  ?assertEqual("nohost", wms_common:get_hostname()),
+  ?assertEqual("makraat", wms_common:get_hostname("wms1@makraat")),
+  ?assertEqual("wms1@nohost", wms_common:add_host("wms1")).
