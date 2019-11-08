@@ -14,7 +14,9 @@
          proplist_to_map/2,
          fork/4,
          get_hostname/1,
-         get_hostname/0, add_host/1]).
+         get_hostname/0,
+         add_host/1,
+         generate_unique_id/1]).
 
 %%====================================================================
 %% API functions
@@ -215,4 +217,13 @@ add_host(Name) when is_list(Name) ->
   Name ++ "@" ++ get_hostname();
 add_host(Name) when is_atom(Name) ->
   list_to_atom(atom_to_list(Name) ++ "@" ++ get_hostname()).
+
+%% -----------------------------------------------------------------------------
+%% Generate ID
+%% -----------------------------------------------------------------------------
+
+-spec generate_unique_id(pos_integer()) ->
+  binary().
+generate_unique_id(Size) ->
+  wms_common_id:generate_unique_id(Size).
 

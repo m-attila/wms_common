@@ -144,3 +144,7 @@ host_test() ->
   ?assertEqual("makraat", wms_common:get_hostname("wms1@makraat")),
   ?assertEqual("wms1@nohost", wms_common:add_host("wms1")),
   ?assertEqual(wms1@nohost, wms_common:add_host(wms1)).
+
+generate_unique_id_test() ->
+  ShortID = wms_common:generate_unique_id(8),
+  ?assert(byte_size(ShortID) >= 8).
